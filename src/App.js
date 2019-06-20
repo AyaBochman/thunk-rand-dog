@@ -45,6 +45,7 @@ class App extends Component {
       <div className="App">
 
         <h1>Search in List</h1>
+        <p>hello</p>
         <input type={'text'} placeholder={'search...'} onChange={this.handleChange} />
         <br />
         <br />
