@@ -8,13 +8,15 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { found: {} }
-
+    this.state = { found: {},
+  }
+  this.myRef = React.createRef(); 
   }
 
   handleChange = (e) => {
 
-    let listItems = this.refs.listItems.childNodes;
+    let listItems = this.myRef.current.childNodes;
+    console.log(listItems)
     var foundItem = {};
     if (e.target.value.length > 2) {
       listItems.forEach((item, i) => {
@@ -45,16 +47,16 @@ class App extends Component {
       <div className="App">
 
         <h1>Search in List</h1>
-        <p>hello</p>
+        {/* <p>hello</p> */}
         <input type={'text'} placeholder={'search...'} onChange={this.handleChange} />
         <br />
         <br />
-        <div ref="listItems">
+        <div ref={this.myRef}>
           {list.map((item, i) => {
             return <li key={i} className={this.state.found[item] ? 'highlight' : null}>{item}</li>
           })}
         </div>
-<button type={'button'} className={'btn btn-primary'}>Hello</button>
+
       </div>
     );
   }
