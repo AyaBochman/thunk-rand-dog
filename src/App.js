@@ -8,52 +8,63 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { found: {},
+    this.state = {
+      found: {},
+    }
+    this.myRef = React.createRef();
   }
-  this.myRef = React.createRef(); 
-  }
 
-  handleChange = (e) => {
+clearSelection = ()=>{
+  this.setState({
+    found: {}
+  })
+}
 
-    let listItems = this.myRef.current.childNodes;
-    console.log(listItems)
-    var foundItem = {};
-    if (e.target.value.length > 2) {
-      listItems.forEach((item, i) => {
+handleChange = (e) => {
+  console.log(this.myRef.current)
+  
+      let listItems = this.myRef.current.childNodes;
+  console.log(listItems)
+  
+      const foundItem = {};
+      if (e.target.value.length > 2) {
+  
+    
+        listItems.forEach((item, i) => {
+  
+          if (item.innerText.toLowerCase().includes(e.target.value)) {
 
-        if (item.innerText.toLowerCase().includes(e.target.value)) {
-
-          foundItem[listItems[i].innerText] = true;
-          console.log(foundItem)
-          this.setState({
-            found: foundItem
-          })
-
-        }
-      })
+            foundItem[i] = true;
+            console.log(foundItem)
+            this.setState({
+              found: foundItem
+            })
+  
+          }
+          
+        })
+      }
+  
+      if (e.target.value === "") {
+    this.clearSelection();
+      }
     }
 
-    if (e.target.value == "") {
-      this.setState({
-        found: {}
-      })
-    }
-  }
 
   render() {
 
     return (
 
       <div className="App">
-
-        <h1>Search in List</h1>
-        {/* <p>hello</p> */}
+        <h3>My Todo App</h3>
+        <small>Search for todo's in your list</small>
+        <br />
         <input type={'text'} placeholder={'search...'} onChange={this.handleChange} />
         <br />
         <br />
         <div ref={this.myRef}>
           {list.map((item, i) => {
-            return <li key={i} className={this.state.found[item] ? 'highlight' : null}>{item}</li>
+            return <li key={i} className={this.state.found[i] ? 'highlight' : null}>{item}</li>
           })}
         </div>
 
