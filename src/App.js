@@ -1,72 +1,46 @@
 import React, { Component } from 'react';
 
 import './App.css';
+import { connect } from 'react-redux';
+import { getDog } from './redux/actions';
+import { bindActionCreators } from "redux";
+import PropTypes from 'prop-types';
 
-const list = ["ride a unicorn", "travel to amsterdam", "finish my blog post", "feed my dog", "workout 3 times", "watch GOT"]
 
 class App extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      found: {},
+      name: "Get Random Dog",
+     
     }
-    this.myRef = React.createRef();
+
+
   }
 
-clearSelection = ()=>{
-  this.setState({
-    found: {}
-  })
-}
 
-handleChange = (e) => {
-  console.log(this.myRef.current)
-  
-      let listItems = this.myRef.current.childNodes;
-  console.log(listItems)
-  
-      const foundItem = {};
-      if (e.target.value.length > 2) {
-  
-    
-        listItems.forEach((item, i) => {
-  
-          if (item.innerText.toLowerCase().includes(e.target.value)) {
+  componentWillMount(){
+    this.props.actions.getDog()
+  }
 
-            foundItem[i] = true;
-            console.log(foundItem)
-            this.setState({
-              found: foundItem
-            })
-  
-          }
-          
-        })
-      }
-  
-      if (e.target.value === "") {
-    this.clearSelection();
-      }
-    }
+
+  handleClick = () => {
+    this.props.actions.getDog()
+  }
+
 
 
   render() {
-
+    console.log("render")
     return (
 
       <div className="App">
-        <h3>My Todo App</h3>
-        <small>Search for todo's in your list</small>
-        <br />
-        <input type={'text'} placeholder={'search...'} onChange={this.handleChange} />
-        <br />
-        <br />
-        <div ref={this.myRef}>
-          {list.map((item, i) => {
-            return <li key={i} className={this.state.found[i] ? 'highlight' : null}>{item}</li>
-          })}
-        </div>
+        <h4>Image of Dog</h4>
+<img src={this.props.dog} alt="randDog"/>
+<br/>
+<br/>
+        <button className={'btn btn-primary'} onClick={this.handleClick}>Get Random Dog</button>
 
       </div>
     );
@@ -74,5 +48,27 @@ handleChange = (e) => {
 }
 
 
-export default App;
+App.propTypes = {
+  getDog: PropTypes.func.isRequired,
+  dog:PropTypes.string.isRequired,
+  newDog:PropTypes.string.isRequired
+};
+
+const mapStateToProps = state => ({
+dog: state.dog,
+})
+
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(
+    {
+      getDog: getDog,
+    
+    },
+    dispatch
+  )
+  
+  })
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);
 
